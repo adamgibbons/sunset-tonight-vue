@@ -1,12 +1,17 @@
 <template>
   <div>
+    <button @click="init">Get my sunset</button>
     <p>
       1. Determine your coordinates:
       <pre>{{coordinates}}</pre>
     </p>
     <p>
       2. Determine time of tonight's sunset:
-      <pre>{{sunset || 'calculating...'}}</pre>
+      <pre>{{sunset || '-'}}</pre>
+    </p>
+    <p>
+      3. Get forecast at sunset
+      <pre>{{forecast || '-'}}</pre>
     </p>
   </div>
 </template>
@@ -20,16 +25,19 @@ function handleError ({ code }) {
 
 export default {
   name: 'Sunset',
-  computed: mapGetters(['coordinates', 'sunset']),
-  methods: mapActions(['setCoordinates']),
-  mounted () {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords
-        this.setCoordinates({ latitude, longitude })
-      }, handleError)
-    } else {
-      console.log('Geolocation is not supported by this browser.')
+  computed: mapGetters(['coordinates', 'sunset', 'forecast']),
+  methods: {
+    ...mapActions(['setCoordinates']),
+    init () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          console.log(position, 'foo')
+          const { latitude, longitude } = position.coords
+          this.setCoordinates({ latitude, longitude })
+        }, handleError)
+      } else {
+        console.log('Geolocation is not supported by this browser.')
+      }
     }
   }
 }
