@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import calculateTimeOfSunset from '@/utils/solar-calc'
+import utcToUnixTimestamp from '@/utils/utc-to-unix-timestamp'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,7 @@ export default new Vuex.Store({
     coordinates: state => {
       return { latitude: state.latitude, longitude: state.longitude }
     },
-    sunset: state => state.sunset
+    sunset: state => utcToUnixTimestamp(state.sunset)
   },
   mutations: {
     setCoordinates (state, { latitude, longitude }) {

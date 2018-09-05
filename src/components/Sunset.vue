@@ -20,9 +20,6 @@ function handleError ({ code }) {
 
 export default {
   name: 'Sunset',
-  // props: {
-  //   sunset: Number
-  // },
   computed: mapGetters(['coordinates', 'sunset']),
   methods: mapActions(['setCoordinates']),
   mounted () {
