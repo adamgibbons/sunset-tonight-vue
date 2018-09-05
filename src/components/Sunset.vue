@@ -13,6 +13,8 @@
       3. Get forecast at sunset
       <pre>{{forecast || '-'}}</pre>
     </p>
+
+    <p>Powered by Dark Sky</p>
   </div>
 </template>
 
