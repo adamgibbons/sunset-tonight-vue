@@ -13,6 +13,10 @@
       3. Get forecast at sunset
       <pre>{{forecast || '-'}}</pre>
     </p>
+    <p>
+      4. Result
+      <pre>{{sunsetResult || '-'}}</pre>
+    </p>
 
     <p>Powered by Dark Sky</p>
   </div>
@@ -27,13 +31,12 @@ function handleError ({ code }) {
 
 export default {
   name: 'Sunset',
-  computed: mapGetters(['coordinates', 'sunset', 'forecast']),
+  computed: mapGetters(['coordinates', 'sunset', 'forecast', 'sunsetResult']),
   methods: {
     ...mapActions(['setCoordinates']),
     init () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-          console.log(position, 'foo')
           const { latitude, longitude } = position.coords
           this.setCoordinates({ latitude, longitude })
         }, handleError)

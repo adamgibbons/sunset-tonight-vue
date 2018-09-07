@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import http from 'axios'
 import calculateTimeOfSunset from '@/utils/solar-calc'
 import utcToUnixTimestamp from '@/utils/utc-to-unix-timestamp'
+import evaluateSunset from '@/utils/sunset-algorithm'
 
 Vue.use(Vuex)
 
@@ -11,14 +12,16 @@ export default new Vuex.Store({
     latitude: null,
     longitude: null,
     sunset: null,
-    forecast: null
+    forecast: null,
+    sunsetResult: null
   },
   getters: {
     coordinates: state => {
       return { latitude: state.latitude, longitude: state.longitude }
     },
     sunset: state => utcToUnixTimestamp(state.sunset),
-    forecast: state => state.forecast
+    forecast: state => state.forecast,
+    sunsetResult: state => state.sunsetResult
   },
   mutations: {
     setCoordinates (state, { latitude, longitude }) {
@@ -30,6 +33,9 @@ export default new Vuex.Store({
     },
     setForecast (state, { forecast }) {
       state.forecast = forecast
+    },
+    setSunsetResult (state, { sunsetResult }) {
+      state.sunsetResult = sunsetResult
     }
   },
   actions: {
@@ -38,7 +44,7 @@ export default new Vuex.Store({
       commit('setSunset', { latitude, longitude })
       dispatch('getForecast')
     },
-    getForecast ({ commit, getters, state }) {
+    getForecast ({ commit, dispatch, getters, state }) {
       // TODO move key to env var
       const apiKey = '590014b33dd991435f9576af4c1d81c0'
       const baseUrl = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast'
@@ -49,8 +55,15 @@ export default new Vuex.Store({
       http.get(url)
         .then(({ data }) => {
           commit('setForecast', { forecast: data })
+          dispatch('getSunsetResult', { forecast: data })
         })
         .catch(error => console.log(error))
+    },
+    getSunsetResult ({ commit }, { forecast }) {
+      // may one day be async
+      const res = evaluateSunset([{ source: 'Darksky', forecast: forecast }])
+
+      commit('setSunsetResult', { sunsetResult: res })
     }
   }
 })
