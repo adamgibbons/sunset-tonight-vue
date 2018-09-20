@@ -1,3 +1,14 @@
-export default function ({ windspeed }) {
-  return windspeed > 10
+export default function ({
+  summary,
+  precipIntensity,
+  precipProbability,
+  humidity,
+  pressure,
+  windSpeed,
+  windGust,
+  cloudCover,
+  visibility,
+  ozone
+}) {
+  return summary
 }

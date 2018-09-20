@@ -1,5 +1,7 @@
 <template>
   <div>
+    <div>sunset grade: {{sunsetGrade}}</div>
+    <hr>
     <button @click="init">Get my sunset</button>
     <p>
       1. Determine your coordinates:
@@ -20,6 +22,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import gradeSunset from '@/utils/grade-sunset'
 
 function handleError ({ code }) {
   console.log({ error: code })
@@ -30,7 +33,7 @@ export default {
   computed: {
     ...mapGetters(['coordinates', 'sunset', 'forecast']),
     microForecast () {
-      if (!this.forecast) return
+      if (!this.forecast) return null
 
       const hourlyForecasts = this.forecast.hourly.data.map(({ time }) => {
         return Math.abs(time - this.sunset)
@@ -39,6 +42,11 @@ export default {
       const forecastClosestToSunsetIdx = hourlyForecasts.indexOf(Math.min(...hourlyForecasts))
 
       return this.forecast.hourly.data[forecastClosestToSunsetIdx]
+    },
+    sunsetGrade () {
+      if (!this.microForecast) return null
+
+      return gradeSunset(this.microForecast)
     }
   },
   methods: {
