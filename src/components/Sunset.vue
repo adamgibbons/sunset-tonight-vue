@@ -11,7 +11,7 @@
     </p>
     <p>
       3. Get forecast at sunset
-      <pre>{{forecast || '-'}}</pre>
+      <pre>{{microForecast || '-'}}</pre>
     </p>
 
     <p>Powered by Dark Sky</p>
@@ -27,13 +27,25 @@ function handleError ({ code }) {
 
 export default {
   name: 'Sunset',
-  computed: mapGetters(['coordinates', 'sunset', 'forecast']),
+  computed: {
+    ...mapGetters(['coordinates', 'sunset', 'forecast']),
+    microForecast () {
+      if (!this.forecast) return
+
+      const hourlyForecasts = this.forecast.hourly.data.map(({ time }) => {
+        return Math.abs(time - this.sunset)
+      })
+
+      const forecastClosestToSunsetIdx = hourlyForecasts.indexOf(Math.min(...hourlyForecasts))
+
+      return this.forecast.hourly.data[forecastClosestToSunsetIdx]
+    }
+  },
   methods: {
     ...mapActions(['setCoordinates']),
     init () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-          console.log(position, 'foo')
           const { latitude, longitude } = position.coords
           this.setCoordinates({ latitude, longitude })
         }, handleError)
