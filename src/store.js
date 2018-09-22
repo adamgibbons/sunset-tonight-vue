@@ -4,6 +4,12 @@ import http from 'axios'
 import calculateTimeOfSunset from '@/utils/solar-calc'
 import utcToUnixTimestamp from '@/utils/utc-to-unix-timestamp'
 
+const VIEW_STATES = {
+  PRISTINE: 'PRISTINE',
+  LOADING: 'LOADING',
+  LOADED: 'LOADED'
+}
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -11,14 +17,27 @@ export default new Vuex.Store({
     latitude: null,
     longitude: null,
     sunset: null,
-    forecast: null
+    forecast: null,
+    viewState: VIEW_STATES.PRISTINE
   },
   getters: {
     coordinates: state => {
       return { latitude: state.latitude, longitude: state.longitude }
     },
+    viewState: state => state.viewState,
     sunset: state => utcToUnixTimestamp(state.sunset),
-    forecast: state => state.forecast
+    forecast: state => state.forecast,
+    microForecast: state => {
+      if (!state.forecast) return null
+
+      const hourlyForecasts = state.forecast.hourly.data.map(({ time }) => {
+        return Math.abs(time - state.sunset)
+      })
+
+      const forecastClosestToSunsetIdx = hourlyForecasts.indexOf(Math.min(...hourlyForecasts))
+
+      return state.forecast.hourly.data[forecastClosestToSunsetIdx]
+    }
   },
   mutations: {
     setCoordinates (state, { latitude, longitude }) {
@@ -30,9 +49,15 @@ export default new Vuex.Store({
     },
     setForecast (state, { forecast }) {
       state.forecast = forecast
+    },
+    setViewState (state, { viewState }) {
+      state.viewState = viewState
     }
   },
   actions: {
+    setViewState ({ commit }, { viewState }) {
+      commit('setViewState', { viewState })
+    },
     setCoordinates ({ commit, dispatch }, { latitude, longitude }) {
       commit('setCoordinates', { latitude, longitude })
       commit('setSunset', { latitude, longitude })
@@ -49,6 +74,7 @@ export default new Vuex.Store({
       http.get(url)
         .then(({ data }) => {
           commit('setForecast', { forecast: data })
+          commit('setViewState', { viewState: VIEW_STATES.LOADED })
         })
         .catch(error => console.log(error))
     }

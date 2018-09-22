@@ -1,12 +1,23 @@
 <template>
   <div class="home">
     <!-- <img alt="DebugTonight logo" src="../assets/logo.png"> -->
-    <!-- <Debug /> -->
-    <button @click="init()">
-      Check tonight's sunset
-    </button>
-    <div>
-      {{sunsetGrade}}  
+    <h1>Sunset Tonight</h1>
+    <div v-show="viewState === 'PRISTINE'">
+      <p>Is tonight's sunset worth watching?</p>
+      <button @click="init()">
+        Find out
+      </button>
+    </div>
+    <div v-show="viewState === 'LOADING'">
+      <p>Grading tonight's sunset.<br>Hang on...</p>
+    </div>
+    <div v-show="viewState === 'LOADED'">
+      <p v-if="sunsetGrade">
+        Sunset is going to be great &mdash; don't miss it!
+      </p>
+      <p v-else>
+        Don't bother, you're not missing anything tonight.
+      </p>
     </div>
   </div>
 </template>
@@ -26,18 +37,7 @@ export default {
     Grade
   },
   computed: {
-    ...mapGetters(['coordinates', 'sunset', 'forecast']),
-    microForecast () {
-      if (!this.forecast) return null
-
-      const hourlyForecasts = this.forecast.hourly.data.map(({ time }) => {
-        return Math.abs(time - this.sunset)
-      })
-
-      const forecastClosestToSunsetIdx = hourlyForecasts.indexOf(Math.min(...hourlyForecasts))
-
-      return this.forecast.hourly.data[forecastClosestToSunsetIdx]
-    },
+    ...mapGetters(['coordinates', 'sunset', 'forecast', 'microForecast', 'viewState']),
     sunsetGrade () {
       if (!this.microForecast) return null
 
@@ -48,6 +48,7 @@ export default {
     ...mapActions(['setCoordinates']),
     init () {
       if (navigator.geolocation) {
+        this.$store.dispatch('setViewState', { viewState: 'LOADING' })
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords
           this.setCoordinates({ latitude, longitude })
