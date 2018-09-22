@@ -43,3 +43,18 @@ npm run lint
 GET https://api.darksky.net/forecast/<key>/<lat>,<lon>,<unix-timestamp>
 ```
 
+#### Forecast data:
+```
+{
+  "summary": "Mostly Cloudy",
+  "precipIntensity": 0.0165,
+  "precipProbability": 0.24,
+  "humidity": 0.55,
+  "pressure": 1006.18,
+  "windSpeed": 6.78,
+  "windGust": 12.05,
+  "cloudCover": 0.72,
+  "visibility": 6.03,
+  "ozone": 259.23
+}
+```

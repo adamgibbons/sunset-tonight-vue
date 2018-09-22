@@ -10,5 +10,14 @@ export default function ({
   visibility,
   ozone
 }) {
-  return summary
+
+  if (cloudCover < .3 || cloudCover > .7) return false
+
+  if (visibility < 3) return false
+
+  if (humidity > .75) return false
+
+  if (precipProbability > .8) return false
+
+  return true
 }
