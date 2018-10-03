@@ -18,9 +18,11 @@ export default new Vuex.Store({
     longitude: null,
     sunset: null,
     forecast: null,
+    error: null,
     viewState: VIEW_STATES.PRISTINE
   },
   getters: {
+    error: state => state.error,
     coordinates: state => {
       return { latitude: state.latitude, longitude: state.longitude }
     },
@@ -52,9 +54,15 @@ export default new Vuex.Store({
     },
     setViewState (state, { viewState }) {
       state.viewState = viewState
+    },
+    showError (state, { message }) {
+      state.error = message
     }
   },
   actions: {
+    showError ({ commit }, { message }) {
+      commit('showError', { message })
+    },
     setViewState ({ commit }, { viewState }) {
       commit('setViewState', { viewState })
     },

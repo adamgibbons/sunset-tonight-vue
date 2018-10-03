@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <!-- <img alt="DebugTonight logo" src="../assets/logo.png"> -->
+    <ErrorMessage />
     <h1>Sunset Tonight</h1>
     <div v-show="viewState === 'PRISTINE'">
       <p>Is tonight's sunset worth watching?</p>
@@ -25,19 +26,19 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Grade from '@/components/Grade.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 import gradeSunset from '@/utils/grade-sunset'
-
-function handleError ({ code }) {
-  console.log({ error: code })
-}
 
 export default {
   name: 'home',
-  components: {
-    Grade
-  },
+  components: { Grade, ErrorMessage },
   computed: {
-    ...mapGetters(['coordinates', 'sunset', 'forecast', 'microForecast', 'viewState']),
+    ...mapGetters([
+      'coordinates',
+      'sunset',
+      'forecast',
+      'microForecast',
+      'viewState']),
     sunsetGrade () {
       if (!this.microForecast) return null
 
@@ -45,14 +46,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCoordinates']),
+    ...mapActions(['setCoordinates', 'showError']),
     init () {
       if (navigator.geolocation) {
         this.$store.dispatch('setViewState', { viewState: 'LOADING' })
+
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords
           this.setCoordinates({ latitude, longitude })
-        }, handleError)
+        }, this.showError)
       } else {
         console.log('Geolocation is not supported by this browser.')
       }
