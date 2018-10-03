@@ -1,13 +1,11 @@
 <template>
   <div class="home">
-    <!-- <img alt="DebugTonight logo" src="../assets/logo.png"> -->
+    <!-- <img alt="" src="../assets/logo.png"> -->
     <ErrorMessage />
     <h1>Sunset Tonight</h1>
     <div v-show="viewState === 'PRISTINE'">
       <p>Is tonight's sunset worth watching?</p>
-      <button @click="init()">
-        Find out
-      </button>
+      <button @click="init()">Find out</button>
     </div>
     <div v-show="viewState === 'LOADING'">
       <p>Grading tonight's sunset.<br>Hang on...</p>

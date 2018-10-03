@@ -57,9 +57,15 @@ export default new Vuex.Store({
     },
     showError (state, { message }) {
       state.error = message
+    },
+    destroyError (state) {
+      state.error = null
     }
   },
   actions: {
+    destroyError ({ commit }) {
+      commit('destroyError')
+    },
     showError ({ commit }, { message }) {
       commit('showError', { message })
     },
