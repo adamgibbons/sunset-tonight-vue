@@ -1,14 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import http from 'axios'
-import calculateTimeOfSunset from '@/utils/solar-calc'
-import utcToUnixTimestamp from '@/utils/utc-to-unix-timestamp'
-
-const VIEW_STATES = {
-  PRISTINE: 'PRISTINE',
-  LOADING: 'LOADING',
-  LOADED: 'LOADED'
-}
+import { calculateTimeOfSunset, utcToUnixTimestamp } from '@/utils'
+import { VIEW_STATES } from '@/constants'
 
 Vue.use(Vuex)
 

@@ -3,14 +3,14 @@
     <!-- <img alt="" src="../assets/logo.png"> -->
     <ErrorMessage />
     <h1>Sunset Tonight</h1>
-    <div v-show="viewState === 'PRISTINE'">
+    <div v-show="viewState === VIEW_STATES.PRISTINE">
       <p>Is tonight's sunset worth watching?</p>
       <button @click="init()">Find out</button>
     </div>
-    <div v-show="viewState === 'LOADING'">
+    <div v-show="viewState === VIEW_STATES.LOADING">
       <p>Grading tonight's sunset.<br>Hang on...</p>
     </div>
-    <div v-show="viewState === 'LOADED'">
+    <div v-show="viewState === VIEW_STATES.LOADED">
       <p v-if="sunsetGrade">
         Sunset is going to be great &mdash; don't miss it!
       </p>
@@ -23,13 +23,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Grade from '@/components/Grade.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
-import gradeSunset from '@/utils/grade-sunset'
+import { gradeSunset } from '@/utils'
+import { VIEW_STATES } from '@/constants'
 
 export default {
-  name: 'home',
-  components: { Grade, ErrorMessage },
+  name: 'Root',
+  components: { ErrorMessage },
   computed: {
     ...mapGetters([
       'coordinates',
@@ -43,11 +43,16 @@ export default {
       return gradeSunset(this.microForecast)
     }
   },
+  data () {
+    return {
+      VIEW_STATES
+    }
+  },
   methods: {
-    ...mapActions(['setCoordinates', 'createError']),
+    ...mapActions(['setCoordinates', 'createError', 'setViewState']),
     init () {
       if (navigator.geolocation) {
-        this.$store.dispatch('setViewState', { viewState: 'LOADING' })
+        this.setViewState({ viewState: VIEW_STATES.LOADING })
 
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords

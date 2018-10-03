@@ -10,12 +10,8 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ErrorMessage',
-  computed: {
-    ...mapGetters(['error'])
-  },
-  methods: {
-    ...mapActions(['destroyError'])
-  }
+  computed: mapGetters(['error']),
+  methods: mapActions(['destroyError'])
 }
 </script>
 

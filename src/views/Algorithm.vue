@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import gradeSunset from '@/utils/grade-sunset'
+import { gradeSunset } from '@/utils'
 
 const [STRATUS, CUMULUS, CIRRUS] = ['STRATUS', 'CUMULUS', 'CIRRUS']
 const CLOUD_TYPES = [STRATUS, CUMULUS, CIRRUS]

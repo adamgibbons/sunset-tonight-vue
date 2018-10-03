@@ -22,7 +22,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import gradeSunset from '@/utils/grade-sunset'
+import { gradeSunset } from '@/utils'
 
 function handleError ({ code }) {
   console.log({ error: code })

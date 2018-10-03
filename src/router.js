@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Root from './views/Root.vue'
 import Algorithm from './views/Algorithm.vue'
 import Debug from './views/Debug.vue'
 
@@ -12,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'root',
+      component: Root
     },
     {
       path: '/algorithm',
