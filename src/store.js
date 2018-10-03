@@ -55,7 +55,7 @@ export default new Vuex.Store({
     setViewState (state, { viewState }) {
       state.viewState = viewState
     },
-    showError (state, { message }) {
+    createError (state, { message }) {
       state.error = message
     },
     destroyError (state) {
@@ -66,8 +66,8 @@ export default new Vuex.Store({
     destroyError ({ commit }) {
       commit('destroyError')
     },
-    showError ({ commit }, { message }) {
-      commit('showError', { message })
+    createError ({ commit }, { message }) {
+      commit('createError', { message })
     },
     setViewState ({ commit }, { viewState }) {
       commit('setViewState', { viewState })

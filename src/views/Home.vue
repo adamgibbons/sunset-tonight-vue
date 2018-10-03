@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCoordinates', 'showError']),
+    ...mapActions(['setCoordinates', 'createError']),
     init () {
       if (navigator.geolocation) {
         this.$store.dispatch('setViewState', { viewState: 'LOADING' })
@@ -52,9 +52,9 @@ export default {
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords
           this.setCoordinates({ latitude, longitude })
-        }, this.showError)
+        }, this.createError)
       } else {
-        console.log('Geolocation is not supported by this browser.')
+        this.createError({ message: 'Geolocation is not supported by this browser.' })
       }
     }
   }

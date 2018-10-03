@@ -34,5 +34,6 @@ export default {
     font-weight: 100;
     top: .66rem;
     right: 1rem;
+    padding: .66em;
   }
 </style>
