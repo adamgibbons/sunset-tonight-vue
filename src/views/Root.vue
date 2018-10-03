@@ -25,7 +25,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 import { gradeSunset } from '@/utils'
-import { VIEW_STATES } from '@/constants'
+import { VIEW_STATES } from '@/store/constants'
 
 export default {
   name: 'Root',

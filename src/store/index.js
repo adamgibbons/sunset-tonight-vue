@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import http from 'axios'
 import { calculateTimeOfSunset, utcToUnixTimestamp } from '@/utils'
-import { VIEW_STATES } from '@/constants'
+import { VIEW_STATES } from '@/store/constants'
 
 Vue.use(Vuex)
 
